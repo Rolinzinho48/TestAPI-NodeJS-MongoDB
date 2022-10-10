@@ -17,7 +17,7 @@ app.use(
 app.use(express.json())
 
 
-//rotas da api
+//rotas da api(get_)
 app.get('/users', async (req, res) => {
     try {
       const user = await User.find()
@@ -37,18 +37,20 @@ app.get('/users/:id', async (req, res) => {
         res.status(500).json({erro:error})
     }
 })
-
-
+//rotas da api(post)
 app.post('/users', async(req,res)=>{
     
-    const {nome,saldo,PosX} = req.body
+    const {nome,progress,XP} = req.body
     const user = {
         nome,
-        saldo,
-        PosX
+        progress,
+        XP
     }
-
-    if(!nome){
+    const nameUser = await User.findOne({nome:nome})
+    if(nameUser){
+        res.status(422).json({mensage:"Este nome ja esta cadastrado!"})
+    }
+    else if(!nome){
         res.status(422).json({mensage:"O nome é obrigatorio!"})
     }
     else if(saldo == undefined){
@@ -70,16 +72,16 @@ app.post('/users', async(req,res)=>{
    
     
 })
-
+//rotas da api(patch)
 app.patch('/users/:id', async (req, res) => {
     const idUser = req.params.id
   
-    const { nome, saldo, PosX } = req.body
+    const { nome, progress, XP } = req.body
   
     const person = {
       nome,
-      saldo,
-      PosX,
+      progress,
+      XP,
     }
   
     try {
@@ -95,10 +97,10 @@ app.patch('/users/:id', async (req, res) => {
     } catch (error) {
       res.status(500).json({ erro: error })
     }
-  })
+})
 
 //inicializar o servido quando conectar ao mongo
-mongoose.connect('mongodb://localhost:27017/test')
+mongoose.connect('mongodb://190.10.1.254:8090/abaete')
 .then(()=>{
     app.listen(port,()=>{
         console.log("Rodando")

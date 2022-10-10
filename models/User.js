@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const User = mongoose.model('User',{
-    nome:String,
-    saldo:Number,
-    PosX:Number
+const User = mongoose.model('Player',{
+    name:String,
+    progress:Number,
+    XP:Number
 })
 
 module.exports = User
